@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@plugin 'tailwind-scrollbar';
+@source "../.flowbite-react/class-list.json";
+
+@variant dark (&:where(.dark, .dark *));
+
+@keyframes spin-slow {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes moon-pulse {
+  0%, 100% { transform: scale(1) rotate(-10deg);   opacity: 1; }
+  50%       { transform: scale(1.2) rotate(10deg);  opacity: 0.8; }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 5s linear infinite;
+}
+
+.animate-moon-pulse {
+  animation: moon-pulse 2.5s ease-in-out infinite;
+}
+
+body {
+  height: 100vh;
+}
+
+.ql-editor {
+  font-size: 1.05rem;
+}
+
+.post-content p {
+  margin-bottom: 0.5rem;
+}
+
+.post-content h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: sans-serif;
+  margin: 1.5rem 0;
+}
+
+.post-content h2 {
+  font-size: 1.4rem;
+  font-family: sans-serif;
+  margin: 1.5rem 0;
+}
+
+.post-content a {
+  color: rgb(73, 149, 199);
+  text-decoration: none;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+}
+
+.dark .post-content a {
+  color: red;
+}
