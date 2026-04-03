@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
+import documentRoutes from "./routes/document.route.js";
 
 dotenv.config();
 
@@ -21,12 +22,9 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use("/api/documents", documentRoutes);
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
@@ -38,3 +36,9 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+
+
