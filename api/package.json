@@ -1,5 +1,5 @@
 {
-  "name": "blog-app",
+  "name": "syncdoc-api",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -26,10 +26,12 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.23.0",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "socket.io": "^4.8.3",
+    "yjs": "^13.6.30"
   }
 }
