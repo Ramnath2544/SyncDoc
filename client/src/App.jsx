@@ -5,7 +5,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import EditorPage from './pages/EditorPage';
 import Topbar from './components/Topbar';
-import FooterComponent from './components/Footer';
+import FooterComponent from './components/Footer'; 
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
   return (
@@ -18,7 +19,9 @@ export default function App() {
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/register' element={<RegisterPage />} />
-            <Route path='/dashboard' element={<DashboardPage />} />
+           <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Route>
             <Route path='/editor/:id' element={<EditorPage />} />
           </Routes>
         </main>
