@@ -54,3 +54,39 @@ export const saveMessage = async (req, res, next) => {
     next(err);
   }
 };
+
+export const uploadFile = async (req, res, next) => {
+  try {
+    const { documentId } = req.params;
+    const doc = await Document.findById(documentId);
+    if (!doc) return next(errorHandler(404, 'Document not found'));
+
+    const isOwner = doc.owner.toString() === req.user.id;
+    const isCollaborator = doc.collaborators.some(
+      (c) => c.userId.toString() === req.user.id
+    );
+    if (!isOwner && !isCollaborator) {
+      return next(errorHandler(403, 'Access denied'));
+    }
+
+    if (!req.file) return next(errorHandler(400, 'No file uploaded'));
+
+    const isImage = req.file.mimetype.startsWith('image/');
+
+    const message = new Message({
+      documentId,
+      sender: req.user.id,
+      text: null,
+      fileUrl: req.file.path,          
+      fileType: isImage ? 'image' : 'file',
+      fileName: req.file.originalname,
+    });
+
+    const saved = await message.save();
+    const populated = await saved.populate('sender', 'username profilePicture');
+
+    res.status(201).json(populated);
+  } catch (err) {
+    next(err);
+  }
+};
