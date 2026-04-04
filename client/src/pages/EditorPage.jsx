@@ -10,9 +10,10 @@ import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import * as Y from "yjs";
 import { Spinner, Badge } from "flowbite-react";
-import { HiArrowLeft, HiCheck, HiWifi } from "react-icons/hi";
+import { HiArrowLeft, HiCheck, HiWifi, HiUserAdd } from "react-icons/hi"; 
 import { MdWifiOff } from "react-icons/md";
 import EditorToolbar from "../components/EditorToolbar";
+import ShareModal from "../components/ShareModal"; 
 import { getRandomColor } from "../utils/getRandomColor";
 import "../editor.css";
 
@@ -35,6 +36,7 @@ export default function EditorPage() {
   const [connected, setConnected] = useState(false);
   const [awarenessUsers, setAwarenessUsers] = useState([]);
   const [provider, setProvider] = useState(null);
+  const [shareModal, setShareModal] = useState(false); 
 
   const saveTimerRef = useRef(null);
 
@@ -96,16 +98,12 @@ export default function EditorPage() {
   const editor = useEditor(
     {
       extensions: [
-        StarterKit.configure({
-          history: false,
-        }),
+        StarterKit.configure({ history: false }),
         Placeholder.configure({
           placeholder: "Start writing your document...",
         }),
         CharacterCount,
-        Collaboration.configure({
-          document: ydoc,
-        }),
+        Collaboration.configure({ document: ydoc }),
         ...(provider
           ? [
               CollaborationCursor.configure({
@@ -157,6 +155,10 @@ export default function EditorPage() {
     };
   }, []);
 
+  const isOwner =
+    document?.owner?._id === currentUser?._id ||
+    document?.owner === currentUser?._id;
+
   const SaveIndicator = () => {
     if (saveStatus === "saving")
       return (
@@ -186,7 +188,9 @@ export default function EditorPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
+
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={() => navigate("/dashboard")}
@@ -200,6 +204,7 @@ export default function EditorPage() {
         </div>
 
         <div className="flex items-center gap-3">
+
           <div className="hidden sm:flex items-center -space-x-2">
             {awarenessUsers.slice(0, 5).map((user, i) => (
               <div
@@ -217,6 +222,17 @@ export default function EditorPage() {
               </div>
             )}
           </div>
+
+          {document && isOwner && (
+            <button
+              onClick={() => setShareModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium
+                bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            >
+              <HiUserAdd className="text-base" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
+          )}
 
           <Badge color={connected ? "success" : "failure"} size="sm">
             {connected ? (
@@ -239,6 +255,13 @@ export default function EditorPage() {
       <div className="flex-1 max-w-4xl w-full mx-auto px-4">
         <EditorContent editor={editor} />
       </div>
+
+      <ShareModal
+        show={shareModal}
+        onClose={() => setShareModal(false)}
+        document={document}
+        onDocumentUpdate={(updatedDoc) => setDocument(updatedDoc)}
+      />
     </div>
   );
 }

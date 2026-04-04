@@ -10,10 +10,10 @@ import {
   Label,
   Dropdown,
   Badge,
-  DropdownItem,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  DropdownItem,
 } from 'flowbite-react';
 import {
   HiPlus,
@@ -22,7 +22,9 @@ import {
   HiPencil,
   HiTrash,
   HiClock,
+  HiUserAdd,
 } from 'react-icons/hi';
+import ShareModal from '../components/ShareModal';
 
 export default function DashboardPage() {
   const { currentUser } = useSelector((state) => state.user);
@@ -40,6 +42,8 @@ export default function DashboardPage() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [shareModal, setShareModal] = useState(false);
+  const [shareTarget, setShareTarget] = useState(null);
 
   useEffect(() => {
     const fetchDocs = async () => {
@@ -212,7 +216,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Document Cards Grid */}
         {!loading && documents.length > 0 && (
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
             {documents.map((doc) => {
@@ -222,7 +225,6 @@ export default function DashboardPage() {
                   key={doc._id}
                   className='cursor-pointer hover:shadow-lg transition-shadow duration-200 dark:bg-gray-800 group'
                 >
-                  {/* Card Top: Title + Menu */}
                   <div className='flex items-start justify-between gap-2'>
                     <div
                       className='flex-1 min-w-0'
@@ -234,7 +236,6 @@ export default function DashboardPage() {
                           {doc.title}
                         </h3>
                       </div>
-                      {/* Role Badge */}
                       <Badge
                         color={roleBadgeColor[role]}
                         size='sm'
@@ -244,7 +245,6 @@ export default function DashboardPage() {
                       </Badge>
                     </div>
 
-                    {/* 3-dot Menu */}
                     <Dropdown
                       arrowIcon={false}
                       inline
@@ -254,6 +254,13 @@ export default function DashboardPage() {
                         </span>
                       }
                     >
+                      <DropdownItem
+                        icon={HiDocumentText}
+                        onClick={() => navigate(`/documents/${doc._id}`)}
+                      >
+                        Open
+                      </DropdownItem>
+
                       {(role === 'owner' || role === 'editor') && (
                         <DropdownItem
                           icon={HiPencil}
@@ -262,7 +269,19 @@ export default function DashboardPage() {
                           Rename
                         </DropdownItem>
                       )}
-                      {/* Delete — owner only */}
+
+                      {role === 'owner' && (
+                        <DropdownItem
+                          icon={HiUserAdd}
+                          onClick={() => {
+                            setShareTarget(doc);
+                            setShareModal(true);
+                          }}
+                        >
+                          Share
+                        </DropdownItem>
+                      )}
+
                       {role === 'owner' && (
                         <DropdownItem
                           icon={HiTrash}
@@ -272,17 +291,9 @@ export default function DashboardPage() {
                           Delete
                         </DropdownItem>
                       )}
-                      {/* Viewer gets open only */}
-                      <DropdownItem
-                        icon={HiDocumentText}
-                        onClick={() => navigate(`/documents/${doc._id}`)}
-                      >
-                        Open
-                      </DropdownItem>
                     </Dropdown>
                   </div>
 
-                  {/* Card Footer: Last updated */}
                   <div
                     className='flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 mt-2'
                     onClick={() => navigate(`/documents/${doc._id}`)}
@@ -350,6 +361,18 @@ export default function DashboardPage() {
           </Button>
         </ModalFooter>
       </Modal>
+
+      <ShareModal
+        show={shareModal}
+        onClose={() => setShareModal(false)}
+        document={shareTarget}
+        onDocumentUpdate={(updatedDoc) => {
+          setDocuments((prev) =>
+            prev.map((d) => (d._id === updatedDoc._id ? updatedDoc : d)),
+          );
+          setShareTarget(updatedDoc);
+        }}
+      />
     </div>
   );
 }
