@@ -14,7 +14,7 @@ export default function App() {
       <div className='flex flex-col min-h-screen'>
         <Topbar />
 
-        <main className='flex-grow'>
+        <main className='relative z-0 flex-grow'>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<LoginPage />} />

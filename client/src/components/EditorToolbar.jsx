@@ -44,7 +44,7 @@ export default function EditorToolbar({ editor }) {
   if (!editor) return null;
 
   return (
-    <div className='flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 sticky top-0 z-10'>
+    <div className='flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 sticky top-0 z-[5]'>
       <ToolbarButton
         tooltip='Heading 1'
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}

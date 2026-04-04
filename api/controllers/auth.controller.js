@@ -3,6 +3,13 @@ import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { errorHandler } from '../utils/error.js';
 
+const accessTokenCookie = {
+  httpOnly: true,
+  path: '/',
+  sameSite: 'lax',
+  secure: process.env.NODE_ENV === 'production',
+};
+
 export const register = async (req, res, next) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password || username === '' || email === '' || password === '') {
@@ -51,14 +58,17 @@ export const login = async (req, res, next) => {
     res
       .status(200)
       .cookie('access_token', token, {
-        httpOnly: true,
-        path: '/',
-        sameSite: 'lax',
+        ...accessTokenCookie,
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        secure: process.env.NODE_ENV === 'production',
       })
       .json({ user: rest });
   } catch (error) {
     next(error);
   }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie('access_token', accessTokenCookie).status(200).json({
+    message: 'Signed out successfully',
+  });
 };

@@ -10,19 +10,34 @@ import {
   DropdownHeader,
   DropdownDivider,
 } from 'flowbite-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { toggleTheme } from '../redux/theme/themeSlice';
+import { signoutSuccess } from '../redux/user/userSlice';
 
 export default function Topbar() {
   const path = useLocation().pathname;
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
 
+  const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch {
+      /* still clear client state if API is unreachable */
+    }
+    dispatch(signoutSuccess());
+    navigate('/login');
+  };
+
   return (
-    <Navbar className='border-b-2'>
+    <Navbar className='relative z-50 border-b-2'>
       <Link
         to='/'
         className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
@@ -67,7 +82,7 @@ export default function Topbar() {
               <DropdownItem>Dashboard</DropdownItem>
             </Link>
             <DropdownDivider />
-            <DropdownItem>Sign out</DropdownItem>
+            <DropdownItem onClick={handleSignOut}>Sign out</DropdownItem>
           </Dropdown>
         ) : (
           <Link to='/login'>
