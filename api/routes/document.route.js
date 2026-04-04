@@ -3,6 +3,7 @@ import {
   createDocument,
   getDocuments,
   getDocument,
+  updateDocumentContent,
   updateDocumentTitle,
   deleteDocument,
 } from "../controllers/document.controller.js";
@@ -16,5 +17,6 @@ router.get("/", verifyToken, getDocuments);
 router.get("/:id", verifyToken, getDocument);
 router.put("/:id/title", verifyToken, updateDocumentTitle);
 router.delete("/:id", verifyToken, deleteDocument);
+router.put("/:id/content", verifyToken, updateDocumentContent);
 
 export default router;
