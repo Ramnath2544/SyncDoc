@@ -16,11 +16,13 @@ import {
   HiWifi,
   HiUserAdd,
   HiChat,
+  HiSparkles,
 } from 'react-icons/hi';
 import { MdWifiOff } from 'react-icons/md';
 import EditorToolbar from '../components/EditorToolbar';
 import ShareModal from '../components/ShareModal';
 import ChatSidebar from '../components/ChatSidebar';
+import AiPanel from '../components/AiPanel';
 import { getRandomColor } from '../utils/getRandomColor';
 import '../editor.css';
 
@@ -45,6 +47,7 @@ export default function EditorPage() {
   const [provider, setProvider] = useState(null);
   const [shareModal, setShareModal] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
 
   const saveTimerRef = useRef(null);
 
@@ -255,6 +258,19 @@ export default function EditorPage() {
             <span className='hidden sm:inline'>Chat</span>
           </button>
 
+          <button
+            onClick={() => setAiOpen((prev) => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors
+              ${
+                aiOpen
+                  ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+              }`}
+          >
+            <HiSparkles className='text-base' />
+            <span className='hidden sm:inline'>AI</span>
+          </button>
+
           <Badge color={connected ? 'success' : 'failure'} size='sm'>
             {connected ? (
               <span className='flex items-center gap-1'>
@@ -276,7 +292,7 @@ export default function EditorPage() {
       <div className='flex flex-1 overflow-hidden'>
         <div
           className={`flex-1 overflow-y-auto px-4 transition-all duration-300
-            ${chatOpen ? 'max-w-full' : 'max-w-4xl mx-auto w-full'}`}
+            ${chatOpen || aiOpen ? 'max-w-full' : 'max-w-4xl mx-auto w-full'}`}
         >
           <EditorContent editor={editor} />
         </div>
@@ -284,6 +300,8 @@ export default function EditorPage() {
         {chatOpen && (
           <ChatSidebar documentId={id} onClose={() => setChatOpen(false)} />
         )}
+
+        {aiOpen && <AiPanel documentId={id} onClose={() => setAiOpen(false)} />}
       </div>
 
       <ShareModal

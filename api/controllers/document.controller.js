@@ -6,7 +6,7 @@ export const createDocument = async (req, res, next) => {
   try {
     const newDoc = new Document({
       title: "Untitled Document",
-      owner: req.user.id, 
+      owner: req.user.id,
     });
     const savedDoc = await newDoc.save();
     res.status(201).json(savedDoc);
@@ -18,13 +18,10 @@ export const createDocument = async (req, res, next) => {
 export const getDocuments = async (req, res, next) => {
   try {
     const docs = await Document.find({
-      $or: [
-        { owner: req.user.id },
-        { "collaborators.userId": req.user.id },
-      ],
+      $or: [{ owner: req.user.id }, { "collaborators.userId": req.user.id }],
     })
       .populate("owner", "username email profilePicture")
-      .sort({ updatedAt: -1 }); 
+      .sort({ updatedAt: -1 });
 
     res.status(200).json(docs);
   } catch (err) {
@@ -42,7 +39,7 @@ export const getDocument = async (req, res, next) => {
 
     const isOwner = doc.owner._id.toString() === req.user.id;
     const isCollaborator = doc.collaborators.some(
-      (c) => c.userId._id.toString() === req.user.id
+      (c) => c.userId._id.toString() === req.user.id,
     );
 
     if (!isOwner && !isCollaborator) {
@@ -67,11 +64,13 @@ export const updateDocumentTitle = async (req, res, next) => {
 
     const isOwner = doc.owner.toString() === req.user.id;
     const isEditor = doc.collaborators.some(
-      (c) => c.userId.toString() === req.user.id && c.role === "editor"
+      (c) => c.userId.toString() === req.user.id && c.role === "editor",
     );
 
     if (!isOwner && !isEditor) {
-      return next(errorHandler(403, "You do not have permission to rename this document"));
+      return next(
+        errorHandler(403, "You do not have permission to rename this document"),
+      );
     }
 
     doc.title = title.trim();
@@ -106,10 +105,12 @@ export const updateDocumentContent = async (req, res, next) => {
 
     const isOwner = doc.owner.toString() === req.user.id;
     const isEditor = doc.collaborators.some(
-      (c) => c.userId.toString() === req.user.id && c.role === "editor"
+      (c) => c.userId.toString() === req.user.id && c.role === "editor",
     );
     if (!isOwner && !isEditor) {
-      return next(errorHandler(403, "You do not have permission to edit this document"));
+      return next(
+        errorHandler(403, "You do not have permission to edit this document"),
+      );
     }
 
     doc.content = content;
@@ -148,7 +149,7 @@ export const addCollaborator = async (req, res, next) => {
     }
 
     const alreadyAdded = doc.collaborators.some(
-      (c) => c.userId.toString() === invitedUser._id.toString()
+      (c) => c.userId.toString() === invitedUser._id.toString(),
     );
     if (alreadyAdded) {
       return next(errorHandler(400, "This user is already a collaborator"));
@@ -182,7 +183,7 @@ export const updateCollaboratorRole = async (req, res, next) => {
     }
 
     const collaborator = doc.collaborators.find(
-      (c) => c.userId.toString() === req.params.userId
+      (c) => c.userId.toString() === req.params.userId,
     );
     if (!collaborator) {
       return next(errorHandler(404, "Collaborator not found"));
@@ -210,11 +211,16 @@ export const removeCollaborator = async (req, res, next) => {
     const isSelf = req.params.userId === req.user.id;
 
     if (!isOwner && !isSelf) {
-      return next(errorHandler(403, "You do not have permission to remove this collaborator"));
+      return next(
+        errorHandler(
+          403,
+          "You do not have permission to remove this collaborator",
+        ),
+      );
     }
 
     doc.collaborators = doc.collaborators.filter(
-      (c) => c.userId.toString() !== req.params.userId
+      (c) => c.userId.toString() !== req.params.userId,
     );
     await doc.save();
 

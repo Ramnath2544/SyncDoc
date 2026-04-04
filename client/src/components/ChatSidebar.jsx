@@ -17,7 +17,6 @@ export default function ChatSidebar({ documentId, onClose }) {
   const bottomRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // ── Connect socket & join room ──────────────────────────────────
   useEffect(() => {
     socket = io('http://localhost:3000', { withCredentials: true });
     socket.emit('join-document', documentId);
@@ -33,7 +32,6 @@ export default function ChatSidebar({ documentId, onClose }) {
     };
   }, [documentId]);
 
-  // ── Load chat history ───────────────────────────────────────────
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -51,12 +49,10 @@ export default function ChatSidebar({ documentId, onClose }) {
     fetchMessages();
   }, [documentId]);
 
-  // ── Auto-scroll ─────────────────────────────────────────────────
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // ── Send text message ───────────────────────────────────────────
   const handleSend = async () => {
     if (!text.trim() || sending) return;
     setSending(true);
@@ -79,12 +75,10 @@ export default function ChatSidebar({ documentId, onClose }) {
     }
   };
 
-  // ── Upload file ─────────────────────────────────────────────────
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // 10MB client-side guard
     if (file.size > 10 * 1024 * 1024) {
       alert('File is too large. Maximum size is 10MB.');
       return;
@@ -98,7 +92,7 @@ export default function ChatSidebar({ documentId, onClose }) {
       const res = await fetch(`/api/messages/${documentId}/upload`, {
         method: 'POST',
         credentials: 'include',
-        body: formData, // No Content-Type header — browser sets it with boundary
+        body: formData,
       });
       const savedMessage = await res.json();
       if (res.ok) {
@@ -108,12 +102,10 @@ export default function ChatSidebar({ documentId, onClose }) {
       console.error('Upload failed:', err);
     } finally {
       setUploading(false);
-      // Reset file input so same file can be re-uploaded
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
-  // ── Helpers ─────────────────────────────────────────────────────
   const formatTime = (dateStr) =>
     new Date(dateStr).toLocaleTimeString('en-IN', {
       hour: '2-digit',
@@ -128,10 +120,8 @@ export default function ChatSidebar({ documentId, onClose }) {
     return ext;
   };
 
-  // ── Render ──────────────────────────────────────────────────────
   return (
     <div className='flex flex-col h-full w-72 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0'>
-      {/* Header */}
       <div className='flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700'>
         <h2 className='text-sm font-semibold text-gray-800 dark:text-white'>
           Document Chat
@@ -144,7 +134,6 @@ export default function ChatSidebar({ documentId, onClose }) {
         </button>
       </div>
 
-      {/* Messages */}
       <div className='flex-1 overflow-y-auto px-3 py-3 flex flex-col gap-3'>
         {loading && (
           <div className='flex justify-center py-8'>
@@ -167,7 +156,6 @@ export default function ChatSidebar({ documentId, onClose }) {
               key={msg._id || i}
               className={`flex items-end gap-2 ${mine ? 'flex-row-reverse' : 'flex-row'}`}
             >
-              {/* Avatar */}
               <Avatar
                 img={msg.sender?.profilePicture}
                 rounded
@@ -179,14 +167,12 @@ export default function ChatSidebar({ documentId, onClose }) {
               <div
                 className={`flex flex-col max-w-[78%] ${mine ? 'items-end' : 'items-start'}`}
               >
-                {/* Sender name */}
                 {!mine && (
                   <span className='text-xs text-gray-400 dark:text-gray-500 mb-0.5 ml-1'>
                     {msg.sender?.username}
                   </span>
                 )}
 
-                {/* ── Image message ── */}
                 {msg.fileType === 'image' && (
                   <div
                     className={`rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-600
@@ -201,7 +187,6 @@ export default function ChatSidebar({ documentId, onClose }) {
                   </div>
                 )}
 
-                {/* ── File message ── */}
                 {msg.fileType === 'file' && (
                   <a
                     href={msg.fileUrl}
@@ -227,7 +212,6 @@ export default function ChatSidebar({ documentId, onClose }) {
                   </a>
                 )}
 
-                {/* ── Text message ── */}
                 {msg.text && (
                   <div
                     className={`px-3 py-2 rounded-2xl text-sm break-words
@@ -241,7 +225,6 @@ export default function ChatSidebar({ documentId, onClose }) {
                   </div>
                 )}
 
-                {/* Timestamp */}
                 <span className='text-xs text-gray-300 dark:text-gray-600 mt-0.5 mx-1'>
                   {formatTime(msg.createdAt)}
                 </span>
@@ -253,9 +236,7 @@ export default function ChatSidebar({ documentId, onClose }) {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input Area */}
       <div className='px-3 py-3 border-t border-gray-200 dark:border-gray-700'>
-        {/* Upload progress indicator */}
         {uploading && (
           <div className='flex items-center gap-2 text-xs text-blue-500 mb-2 px-1'>
             <Spinner size='xs' />
@@ -264,7 +245,6 @@ export default function ChatSidebar({ documentId, onClose }) {
         )}
 
         <div className='flex items-center gap-2'>
-          {/* Hidden file input */}
           <input
             ref={fileInputRef}
             type='file'
@@ -272,8 +252,7 @@ export default function ChatSidebar({ documentId, onClose }) {
             onChange={handleFileUpload}
             className='hidden'
           />
-
-          {/* Paperclip button */}
+          \
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
@@ -283,8 +262,6 @@ export default function ChatSidebar({ documentId, onClose }) {
           >
             <HiPaperClip className='text-lg' />
           </button>
-
-          {/* Text input */}
           <input
             type='text'
             value={text}
@@ -296,8 +273,6 @@ export default function ChatSidebar({ documentId, onClose }) {
               placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
               transition-colors'
           />
-
-          {/* Send button */}
           <button
             onClick={handleSend}
             disabled={!text.trim() || sending}

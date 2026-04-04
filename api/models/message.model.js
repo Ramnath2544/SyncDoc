@@ -18,11 +18,11 @@ const messageSchema = new mongoose.Schema(
       maxlength: 2000,
     },
     fileUrl: {
-      type: String,   // Cloudinary URL (for file uploads — Checkpoint 25)
+      type: String,
       default: null,
     },
     fileType: {
-      type: String,   // "image" | "file"
+      type: String,
       default: null,
     },
     fileName: {
@@ -30,7 +30,7 @@ const messageSchema = new mongoose.Schema(
       default: null,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Message = mongoose.model('Message', messageSchema);

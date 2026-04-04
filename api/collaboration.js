@@ -1,8 +1,8 @@
-import { Server } from "@hocuspocus/server";
-import { Database } from "@hocuspocus/extension-database";
-import Document from "./models/document.model.js";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import { Server } from '@hocuspocus/server';
+import { Database } from '@hocuspocus/extension-database';
+import Document from './models/document.model.js';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -11,13 +11,13 @@ const hocuspocus = new Server({
   timeout: 30000,
 
   async onAuthenticate({ token }) {
-    if (!token) throw new Error("Unauthorized: No token provided");
+    if (!token) throw new Error('Unauthorized: No token provided');
 
     try {
       const user = jwt.verify(token, process.env.JWT_SECRET);
       return { user };
     } catch (err) {
-      throw new Error("Unauthorized: Invalid token");
+      throw new Error('Unauthorized: Invalid token');
     }
   },
 
@@ -26,15 +26,15 @@ const hocuspocus = new Server({
     const userId = context.user.id;
 
     const doc = await Document.findById(docId);
-    if (!doc) throw new Error("Document not found");
+    if (!doc) throw new Error('Document not found');
 
     const isOwner = doc.owner.toString() === userId;
     const isCollaborator = doc.collaborators.some(
-      (c) => c.userId.toString() === userId
+      (c) => c.userId.toString() === userId,
     );
 
     if (!isOwner && !isCollaborator) {
-      throw new Error("Forbidden: You do not have access to this document");
+      throw new Error('Forbidden: You do not have access to this document');
     }
   },
 

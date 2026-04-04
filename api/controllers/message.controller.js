@@ -11,7 +11,7 @@ export const getMessages = async (req, res, next) => {
 
     const isOwner = doc.owner.toString() === req.user.id;
     const isCollaborator = doc.collaborators.some(
-      (c) => c.userId.toString() === req.user.id
+      (c) => c.userId.toString() === req.user.id,
     );
     if (!isOwner && !isCollaborator) {
       return next(errorHandler(403, 'Access denied'));
@@ -19,8 +19,8 @@ export const getMessages = async (req, res, next) => {
 
     const messages = await Message.find({ documentId })
       .populate('sender', 'username profilePicture')
-      .sort({ createdAt: 1 }) 
-      .limit(100);            
+      .sort({ createdAt: 1 })
+      .limit(100);
 
     res.status(200).json(messages);
   } catch (err) {
@@ -63,7 +63,7 @@ export const uploadFile = async (req, res, next) => {
 
     const isOwner = doc.owner.toString() === req.user.id;
     const isCollaborator = doc.collaborators.some(
-      (c) => c.userId.toString() === req.user.id
+      (c) => c.userId.toString() === req.user.id,
     );
     if (!isOwner && !isCollaborator) {
       return next(errorHandler(403, 'Access denied'));
@@ -77,7 +77,7 @@ export const uploadFile = async (req, res, next) => {
       documentId,
       sender: req.user.id,
       text: null,
-      fileUrl: req.file.path,          
+      fileUrl: req.file.path,
       fileType: isImage ? 'image' : 'file',
       fileName: req.file.originalname,
     });

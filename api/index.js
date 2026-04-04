@@ -2,13 +2,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import { createServer } from 'http';                    
-import { Server as SocketServer } from 'socket.io';     
+import { createServer } from 'http';
+import { Server as SocketServer } from 'socket.io';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
-import documentRoutes from "./routes/document.route.js";
-import messageRoutes from './routes/message.route.js';  
-import hocuspocus from "./collaboration.js";
+import documentRoutes from './routes/document.route.js';
+import messageRoutes from './routes/message.route.js';
+import hocuspocus from './collaboration.js';
+import aiRoutes from './routes/ai.route.js';
 
 dotenv.config();
 
@@ -22,9 +23,9 @@ mongoose
   });
 
 const app = express();
-const httpServer = createServer(app);                   
+const httpServer = createServer(app);
 
-const io = new SocketServer(httpServer, {               
+const io = new SocketServer(httpServer, {
   cors: {
     origin: 'http://localhost:5173',
     credentials: true,
@@ -52,8 +53,9 @@ app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use("/api/documents", documentRoutes);
-app.use('/api/messages', messageRoutes);               
+app.use('/api/documents', documentRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {

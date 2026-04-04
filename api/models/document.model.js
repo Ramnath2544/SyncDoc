@@ -1,40 +1,40 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const collaboratorSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     role: {
       type: String,
-      enum: ["editor", "viewer"], 
-      default: "viewer",
+      enum: ['editor', 'viewer'],
+      default: 'viewer',
     },
   },
-  { _id: false } 
+  { _id: false },
 );
 
 const documentSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      default: "Untitled Document",
+      default: 'Untitled Document',
       trim: true,
       maxlength: 200,
     },
     content: {
-      type: mongoose.Schema.Types.Mixed, 
+      type: mongoose.Schema.Types.Mixed,
       default: null,
     },
     yjsState: {
-      type: Buffer, 
+      type: Buffer,
       default: null,
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     collaborators: {
@@ -42,8 +42,8 @@ const documentSchema = new mongoose.Schema(
       default: [],
     },
   },
-  { timestamps: true } 
+  { timestamps: true },
 );
 
-const Document = mongoose.model("Document", documentSchema);
+const Document = mongoose.model('Document', documentSchema);
 export default Document;

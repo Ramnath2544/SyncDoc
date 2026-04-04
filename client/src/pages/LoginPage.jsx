@@ -38,8 +38,8 @@ export default function LoginPage() {
       if (!contentType.includes('application/json')) {
         return dispatch(
           signInFailure(
-            'Could not reach the API. Is the server running on port 3000?'
-          )
+            'Could not reach the API. Is the server running on port 3000?',
+          ),
         );
       }
 
@@ -61,7 +61,6 @@ export default function LoginPage() {
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4'>
       <div className='w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8'>
-        {/* Logo / Brand */}
         <div className='mb-6 text-center'>
           <h1 className='text-3xl font-bold text-gray-800 dark:text-white'>
             <span className='px-2 py-1 bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 rounded-lg text-white'>
@@ -74,16 +73,13 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Error Alert */}
         {errorMessage && (
           <Alert className='mb-5' color='failure'>
             {errorMessage}
           </Alert>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-          {/* Email */}
           <div>
             <Label
               htmlFor='email'
@@ -99,7 +95,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <Label
               htmlFor='password'
@@ -115,7 +110,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Submit Button */}
           <Button
             type='submit'
             gradientDuoTone='cyanToBlue'
@@ -133,7 +127,6 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        {/* Register Link */}
         <p className='mt-5 text-center text-sm text-gray-500 dark:text-gray-400'>
           Don&apos;t have an account?{' '}
           <Link
