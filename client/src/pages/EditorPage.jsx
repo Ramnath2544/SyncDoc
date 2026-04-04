@@ -1,48 +1,133 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
-import { Spinner } from "flowbite-react";
-import { HiArrowLeft, HiCheck } from "react-icons/hi";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import { HocuspocusProvider } from "@hocuspocus/provider";
+import * as Y from "yjs";
+import { Spinner, Badge } from "flowbite-react";
+import { HiArrowLeft, HiCheck, HiWifi } from "react-icons/hi";
+import { MdWifiOff } from "react-icons/md";
 import EditorToolbar from "../components/EditorToolbar";
+import { getRandomColor } from "../utils/getRandomColor";
 import "../editor.css";
 
-const SAVE_DELAY = 1500;
+const SAVE_DELAY = 2000;
+
+function getAccessTokenFromCookie() {
+  if (typeof document === "undefined") return "";
+  const match = document.cookie.match(/access_token=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
 
 export default function EditorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
 
-  const [document, setDocument] = useState(null); 
+  const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [saveStatus, setSaveStatus] = useState("saved"); 
-  const [saveTimer, setSaveTimer] = useState(null);
+  const [saveStatus, setSaveStatus] = useState("saved");
+  const [connected, setConnected] = useState(false);
+  const [awarenessUsers, setAwarenessUsers] = useState([]);
+  const [provider, setProvider] = useState(null);
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder: "Start writing your document...",
-      }),
-      CharacterCount,
-    ],
-    content: "",
-    editorProps: {
-      attributes: {
-        class: "tiptap-editor",
+  const saveTimerRef = useRef(null);
+
+  const ydoc = useMemo(() => {
+    void id;
+    return new Y.Doc();
+  }, [id]);
+
+  const collaborationUser = useMemo(
+    () => ({
+      name: currentUser?.username || "Anonymous",
+      color: getRandomColor(),
+    }),
+    [currentUser?.username]
+  );
+
+  useEffect(() => {
+    const p = new HocuspocusProvider({
+      url: "ws://localhost:1234",
+      name: id,
+      document: ydoc,
+      token: getAccessTokenFromCookie(),
+      onConnect: () => setConnected(true),
+      onDisconnect: () => setConnected(false),
+      onAwarenessUpdate: ({ states }) => {
+        const users = [];
+        states.forEach((state) => {
+          if (state.user) users.push(state.user);
+        });
+        setAwarenessUsers(users);
+      },
+    });
+    setProvider(p);
+    return () => {
+      p.destroy();
+      setProvider(null);
+      setConnected(false);
+      setAwarenessUsers([]);
+    };
+  }, [id, ydoc]);
+
+  const saveContent = useCallback(async (editorInstance) => {
+    if (!editorInstance) return;
+    setSaveStatus("saving");
+    try {
+      await fetch(`/api/documents/${id}/content`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ content: editorInstance.getJSON() }),
+      });
+      setSaveStatus("saved");
+    } catch (err) {
+      console.error("Auto-save failed:", err);
+      setSaveStatus("unsaved");
+    }
+  }, [id]);
+
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit.configure({
+          history: false,
+        }),
+        Placeholder.configure({
+          placeholder: "Start writing your document...",
+        }),
+        CharacterCount,
+        Collaboration.configure({
+          document: ydoc,
+        }),
+        ...(provider
+          ? [
+              CollaborationCursor.configure({
+                provider,
+                user: collaborationUser,
+              }),
+            ]
+          : []),
+      ],
+      editorProps: {
+        attributes: { class: "tiptap-editor" },
+      },
+      onUpdate: ({ editor: ed }) => {
+        setSaveStatus("unsaved");
+        if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+        saveTimerRef.current = setTimeout(() => {
+          saveContent(ed);
+        }, SAVE_DELAY);
       },
     },
-    onUpdate: ({ editor }) => {
-      setSaveStatus("unsaved");
-      if (saveTimer) clearTimeout(saveTimer);
-      const timer = setTimeout(() => {
-        saveContent(editor.getJSON());
-      }, SAVE_DELAY);
-      setSaveTimer(timer);
-    },
-  });
+    [ydoc, provider, collaborationUser, saveContent]
+  );
 
   useEffect(() => {
     const fetchDocument = async () => {
@@ -53,66 +138,40 @@ export default function EditorPage() {
         const data = await res.json();
         if (res.ok) {
           setDocument(data);
-          if (data.content && editor) {
-            editor.commands.setContent(data.content);
-          }
         } else {
           navigate("/dashboard");
         }
       } catch (err) {
-        console.error("Failed to load document:", err);
+        console.error("Failed to fetch document:", err);
         navigate("/dashboard");
       } finally {
         setLoading(false);
       }
     };
-
-    if (editor) fetchDocument();
-  }, [id, editor, navigate]);
-
-  const saveContent = useCallback(
-    async (content) => {
-      setSaveStatus("saving");
-      try {
-        await fetch(`/api/documents/${id}/content`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ content }),
-        });
-        setSaveStatus("saved");
-      } catch (err) {
-        console.error("Auto-save failed:", err);
-        setSaveStatus("unsaved");
-      }
-    },
-    [id]
-  );
+    fetchDocument();
+  }, [id, navigate]);
 
   useEffect(() => {
     return () => {
-      if (saveTimer) clearTimeout(saveTimer);
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
-  }, [saveTimer]);
+  }, []);
 
   const SaveIndicator = () => {
     if (saveStatus === "saving")
       return (
-        <span className="flex items-center gap-1.5 text-xs text-gray-400">
+        <span className="flex items-center gap-1 text-xs text-gray-400">
           <Spinner size="xs" /> Saving...
         </span>
       );
     if (saveStatus === "saved")
       return (
-        <span className="flex items-center gap-1.5 text-xs text-green-500">
-          <HiCheck className="text-base" /> Saved
+        <span className="flex items-center gap-1 text-xs text-green-500">
+          <HiCheck /> Saved
         </span>
       );
-    return (
-      <span className="text-xs text-yellow-500">Unsaved changes</span>
-    );
+    return <span className="text-xs text-yellow-500">Unsaved</span>;
   };
-
 
   if (loading) {
     return (
@@ -125,17 +184,13 @@ export default function EditorPage() {
     );
   }
 
-
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
-
-
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
-   
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={() => navigate("/dashboard")}
-            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
+            className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <HiArrowLeft className="text-lg" />
           </button>
@@ -144,7 +199,37 @@ export default function EditorPage() {
           </h1>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center -space-x-2">
+            {awarenessUsers.slice(0, 5).map((user, i) => (
+              <div
+                key={i}
+                title={user.name}
+                className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold border-2 border-white dark:border-gray-800 flex-shrink-0"
+                style={{ backgroundColor: user.color }}
+              >
+                {user.name?.[0]?.toUpperCase()}
+              </div>
+            ))}
+            {awarenessUsers.length > 5 && (
+              <div className="w-7 h-7 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs font-bold border-2 border-white dark:border-gray-800">
+                +{awarenessUsers.length - 5}
+              </div>
+            )}
+          </div>
+
+          <Badge color={connected ? "success" : "failure"} size="sm">
+            {connected ? (
+              <span className="flex items-center gap-1">
+                <HiWifi /> Live
+              </span>
+            ) : (
+              <span className="flex items-center gap-1">
+                <MdWifiOff /> Offline
+              </span>
+            )}
+          </Badge>
+
           <SaveIndicator />
         </div>
       </div>

@@ -9,7 +9,12 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
-        secure: false,
+        changeOrigin: true,
+      },
+      '/collaboration': {
+        target: 'ws://localhost:1234',
+        ws: true,
+        changeOrigin: true,
       },
     },
   },

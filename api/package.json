@@ -20,6 +20,8 @@
   "homepage": "https://github.com/Ramnath-DTU/Blog-App#readme",
   "description": "",
   "dependencies": {
+    "@hocuspocus/extension-database": "^3.4.4",
+    "@hocuspocus/server": "^3.4.4",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",

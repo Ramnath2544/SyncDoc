@@ -9,11 +9,11 @@ const collaboratorSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["editor", "viewer"], // owner is stored separately
+      enum: ["editor", "viewer"], 
       default: "viewer",
     },
   },
-  { _id: false } // Don't create a separate _id for each collaborator entry
+  { _id: false } 
 );
 
 const documentSchema = new mongoose.Schema(
@@ -25,7 +25,11 @@ const documentSchema = new mongoose.Schema(
       maxlength: 200,
     },
     content: {
-      type: mongoose.Schema.Types.Mixed, // Stores Tiptap/Yjs JSON
+      type: mongoose.Schema.Types.Mixed, 
+      default: null,
+    },
+    yjsState: {
+      type: Buffer, 
       default: null,
     },
     owner: {

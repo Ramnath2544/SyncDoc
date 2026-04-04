@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import documentRoutes from "./routes/document.route.js";
+import hocuspocus from "./collaboration.js";
 
 dotenv.config();
 
@@ -39,6 +40,10 @@ app.use((err, req, res, next) => {
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
+});
+
+hocuspocus.listen().then(() => {
+  console.log('Hocuspocus collaboration server running on port 1234');
 });
 
 

@@ -30,8 +30,18 @@ export default function LoginPage() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        return dispatch(
+          signInFailure(
+            'Could not reach the API. Is the server running on port 3000?'
+          )
+        );
+      }
 
       const data = await res.json();
 
