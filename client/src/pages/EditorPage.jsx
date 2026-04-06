@@ -7,6 +7,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import Underline from '@tiptap/extension-underline';
 import { HocuspocusProvider } from '@hocuspocus/provider';
 import * as Y from 'yjs';
 import { Spinner, Badge } from 'flowbite-react';
@@ -109,24 +110,25 @@ export default function EditorPage() {
     [id],
   );
 
-  const editor = useEditor(
-    {
-      extensions: [
-        StarterKit.configure({ history: false }),
-        Placeholder.configure({
-          placeholder: 'Start writing your document...',
-        }),
-        CharacterCount,
-        Collaboration.configure({ document: ydoc }),
-        ...(provider
-          ? [
-              CollaborationCursor.configure({
-                provider,
-                user: collaborationUser,
-              }),
-            ]
-          : []),
-      ],
+const editor = useEditor(
+  {
+    extensions: [
+      StarterKit.configure({ history: false }),
+      Placeholder.configure({
+        placeholder: 'Start writing your document...',
+      }),
+      CharacterCount,
+      Underline, // ✅ Add here
+      Collaboration.configure({ document: ydoc }),
+      ...(provider
+        ? [
+            CollaborationCursor.configure({
+              provider,
+              user: collaborationUser,
+            }),
+          ]
+        : []),
+    ],
       editorProps: {
         attributes: { class: 'tiptap-editor' },
       },

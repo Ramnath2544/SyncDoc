@@ -85,7 +85,7 @@ export default function EditorToolbar({ editor }) {
       </ToolbarButton>
       <ToolbarButton
         tooltip='Underline (Ctrl+U)'
-        onClick={() => editor.chain().focus().toggleUnderline?.() ?? null}
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
         active={editor.isActive('underline')}
       >
         <MdFormatUnderlined />
