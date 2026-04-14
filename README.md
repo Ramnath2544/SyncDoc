@@ -125,8 +125,9 @@ syncdoc-api/
 
 ---
 
-🔧 Getting Started
-1. Install dependencies
+##🔧 Getting Started
+
+### 1. Install dependencies
 Run this in both your root directory and the client directory.
 
 Bash
@@ -136,7 +137,7 @@ npm install
 
 ---
 
-Variable,Description,Example
+## Variable,Description,Example
 MONGO,Database Connection URI,mongodb+srv://<user>:<pwd>@cluster...
 JWT_SECRET,Secret for Auth Tokens,supersecret123
 CLOUDINARY_CLOUD_NAME,Cloudinary Name,your_cloud_name
