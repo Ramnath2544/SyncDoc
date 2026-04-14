@@ -122,6 +122,7 @@ syncdoc-api/
 │   └── index.js                # Main Express server and Socket.io setup
 └── package.json                # Server dependencies and scripts
 <br>
+
 ---
 
 🔧 Getting Started
