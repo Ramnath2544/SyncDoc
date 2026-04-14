@@ -122,68 +122,6 @@ syncdoc-api/
 │   └── index.js                # Main Express server and Socket.io setup
 └── package.json                # Server dependencies and scripts
 
----
 
-🔧 Getting Started
-1. Install dependencies
-Run this in both your root directory and the client directory.
-
-Bash
-npm install
-cd client
-npm install
-
----
-
-Variable,Description,Example
-MONGO,Database Connection URI,mongodb+srv://<user>:<pwd>@cluster...
-JWT_SECRET,Secret for Auth Tokens,supersecret123
-CLOUDINARY_CLOUD_NAME,Cloudinary Name,your_cloud_name
-CLOUDINARY_API_KEY,Cloudinary API Key,123456789012345
-CLOUDINARY_API_SECRET,Cloudinary Secret,abcdefghijklmnopqrstuvwxyz
-GEMINI_API_KEY,Google Generative AI Key,AIzaSyB...
-
----
-
-### 3. Run the development servers
-
-**Backend (Runs Express on 3000, Hocuspocus on 1234):**
-
-```bash
-npm run dev
-
-Frontend (Runs Vite on 5173):
-
-```bash
-cd client
-npm run dev
-
----
-
-## 📈 Commit History Highlights
-- **Foundation:** Initialized Vite React client with Tailwind CSS, Flowbite, and set up the Express/MongoDB backend.
-- **Authentication & State:** Implemented Redux Toolkit, Redux Persist, and a custom JWT authentication loop (Register/Login).
-- **Dashboard & UI:** Built the Dashboard UI for managing document cards, executing CRUD operations, and implemented global Dark Mode.
-- **Collaborative Editor Engine:** Integrated the Tiptap editor shell alongside Yjs and the Hocuspocus server for robust, real-time multiplayer editing and content persistence.
-- **Role-Based Collaboration:** Added a secure invite system, allowing document owners to assign Editor or Viewer roles to other registered users via email.
-- **Real-Time Communication:** Integrated Socket.io and Cloudinary to create a persistent, document-specific chat sidebar supporting text, images, and file attachments.
-- **AI Integration:** Implemented the Google Gemini AI Insights panel, utilizing Server-Sent Events (SSE) to stream real-time grammar corrections and summaries directly into the workspace.
-
----
-
-## 🛠️ Future Enhancements
-- 📄 **Export Options:** Allow users to export documents as PDF, Word, or Markdown files.
-- 🕒 **Version History:** Implement snapshotting to allow users to view and restore previous versions of a document.
-- 🗂️ **Folders & Organization:** Add the ability to group documents into folders or tag them for easier sorting in the Dashboard.
-
----
-
-## 🤝 Contributing
-Contributions are welcome! Please fork the repository and open a pull request. For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## 📧 Contact
-For support or inquiries, please open an issue or email: [ramnath2544@gmail.com](mailto:ramnath2544@gmail.com).
 
 
