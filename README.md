@@ -104,7 +104,6 @@ Document permissions are strictly enforced on both the client and server sides a
 
 ## 📂 Project Structure
 
-```text
 syncdoc-api/
 ├── client/                     # Vite React Frontend
 │   ├── src/
@@ -121,7 +120,7 @@ syncdoc-api/
 │   ├── collaboration.js        # Hocuspocus Yjs Server logic
 │   └── index.js                # Main Express server and Socket.io setup
 └── package.json                # Server dependencies and scripts
-<br>
+
 
 ---
 
