@@ -36,6 +36,7 @@ SyncDoc is a full-stack collaborative document editor built with the MERN stack.
 ## Project Structure
 
 ```text
+<<<<<<< HEAD
 SyncDoc/
 |-- api/
 |   |-- controllers/
@@ -54,6 +55,25 @@ SyncDoc/
 |   `-- package.json
 `-- README.md
 ```
+=======
+syncdoc-api/
+├── client/                     # Vite React Frontend
+│   ├── src/
+│   │   ├── components/         # Reusable UI (EditorToolbar, ChatSidebar, AiPanel, ShareModal)
+│   │   ├── pages/              # App routes (Login, Register, Dashboard, Editor)
+│   │   ├── redux/              # Redux slices (theme, user)
+│   │   └── utils/              # Client-side helpers (random colors for cursors)
+│   └── package.json
+├── api/                        # Express Backend
+│   ├── controllers/            # Business logic (ai, auth, document, message)
+│   ├── models/                 # Database Schemas (User, Document, Message)
+│   ├── routes/                 # API Endpoints
+│   ├── utils/                  # Middleware (JWT verification, Cloudinary setup, Error handling)
+│   ├── collaboration.js        # Hocuspocus Yjs Server logic
+│   └── index.js                # Main Express server and Socket.io setup
+└── package.json                # Server dependencies and scripts
+
+>>>>>>> 747a7c3ff5abe995ee93d0868db316cfd6e6cf09
 
 ## Getting Started
 
