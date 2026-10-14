@@ -1,109 +1,95 @@
-# SyncDoc
+# SyncDoc 🚀
 
-SyncDoc is a full-stack collaborative document editor built with the MERN stack. It combines real-time rich-text collaboration, document chat with file uploads, AI-assisted writing tools, and role-based access control in a single workspace.
+![SyncDoc](https://img.shields.io/badge/SyncDoc-Next--Gen-blue)
+![Gemini 2.0](https://img.shields.io/badge/Gemini-2.0-purple)
+![Three.js](https://img.shields.io/badge/Three.js-3D-green)
+![Real-time](https://img.shields.io/badge/Real--time-Collaboration-orange)
 
-## Features
+A next-generation collaborative document editor with stunning 3D visuals and AI-powered assistance using Google Gemini 2.0.
 
-- Real-time collaborative editing with Tiptap, Yjs, and Hocuspocus
-- Document-specific chat with text, image, and file sharing
-- Role-based access control for owners, editors, and viewers
-- Google Gemini-powered document actions over SSE streaming
-- JWT authentication with persisted client-side session state
-- Responsive React UI built with Tailwind CSS and Flowbite React
+## ✨ Features
 
-## Tech Stack
+### 🎨 Impressive 3D UI
+- **Interactive 3D Hero Section**: Featuring:
+  - Animated distorted sphere with metallic material
+  - Floating document models with smooth animations
+  - Glowing orbital rings
+  - Particle system with 150+ particles
+  - Auto-rotating camera with orbit controls
+  - Environment reflections for realistic lighting
+  - Gradient overlays and glassmorphism effects
 
-**Frontend**
+### 🤖 Latest Google Gemini SDK Integration
+- **Upgraded to `@google/genai`** (Latest Gen AI SDK)
+- Powered by **Gemini 2.0 Flash** model
+- AI capabilities:
+  - Document summarization
+  - Grammar and spell checking
+  - Custom AI prompts
+  - Real-time streaming responses
 
-- React + Vite
-- Tailwind CSS
-- Flowbite React
-- Redux Toolkit + Redux Persist
-- Tiptap
-- Yjs
-- Socket.IO Client
+### 🌐 Real-time Collaboration
+- Live document editing with multiple users
+- Presence indicators with cursor tracking
+- Instant synchronization using Yjs and HocusPocus
+- WebSocket-based communication
 
-**Backend**
+### 💬 Built-in Chat
+- Real-time messaging per document
+- File and image sharing via Cloudinary
+- Team communication while editing
 
-- Node.js + Express
-- MongoDB + Mongoose
-- JWT + bcryptjs
-- Socket.IO
-- Hocuspocus
-- Cloudinary + Multer
-- Google Generative AI SDK
+### ☁️ Cloud Storage
+- Cloudinary integration for media
+- MongoDB for document persistence
+- Secure authentication with JWT
 
-## Project Structure
+## 🛠️ Tech Stack
 
-```text
-<<<<<<< HEAD
-SyncDoc/
-|-- api/
-|   |-- controllers/
-|   |-- models/
-|   |-- routes/
-|   |-- utils/
-|   |-- collaboration.js
-|   |-- index.js
-|   `-- package.json
-|-- client/
-|   |-- src/
-|   |   |-- components/
-|   |   |-- pages/
-|   |   |-- redux/
-|   |   `-- utils/
-|   `-- package.json
-`-- README.md
-```
-=======
-syncdoc-api/
-├── client/                     # Vite React Frontend
-│   ├── src/
-│   │   ├── components/         # Reusable UI (EditorToolbar, ChatSidebar, AiPanel, ShareModal)
-│   │   ├── pages/              # App routes (Login, Register, Dashboard, Editor)
-│   │   ├── redux/              # Redux slices (theme, user)
-│   │   └── utils/              # Client-side helpers (random colors for cursors)
-│   └── package.json
-├── api/                        # Express Backend
-│   ├── controllers/            # Business logic (ai, auth, document, message)
-│   ├── models/                 # Database Schemas (User, Document, Message)
-│   ├── routes/                 # API Endpoints
-│   ├── utils/                  # Middleware (JWT verification, Cloudinary setup, Error handling)
-│   ├── collaboration.js        # Hocuspocus Yjs Server logic
-│   └── index.js                # Main Express server and Socket.io setup
-└── package.json                # Server dependencies and scripts
+### Frontend
+- **React 19** - Latest React version
+- **Three.js** - 3D graphics library
+- **@react-three/fiber** - React renderer for Three.js
+- **@react-three/drei** - Useful helpers for React Three Fiber
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS 4** - Modern utility-first CSS
+- **Redux Toolkit** - State management
+- **TipTap** - Rich text editor
+- **React Router** - Navigation
 
->>>>>>> 747a7c3ff5abe995ee93d0868db316cfd6e6cf09
+### Backend
+- **Node.js & Express** - Server runtime and framework
+- **MongoDB & Mongoose** - Database
+- **Socket.io** - WebSocket communication
+- **@google/genai** - Latest Google Gen AI SDK for Gemini 2.0
+- **HocusPocus** - Real-time collaboration server
+- **Yjs** - CRDT for conflict-free editing
+- **JWT** - Authentication
+- **Cloudinary** - Media management
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
+- Node.js 18+ (Required for @google/genai)
+- MongoDB
+- Google Gemini API Key ([Get it here](https://ai.google.dev/))
+- Cloudinary Account
 
-- Node.js 18+
-- MongoDB database
-- Cloudinary account
-- Google Gemini API key
+### Installation
 
-### 1. Install dependencies
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+cd SyncDoc
+```
 
-Install backend dependencies:
-
+2. **Setup Backend**
 ```bash
 cd api
 npm install
 ```
 
-Install frontend dependencies:
-
-```bash
-cd client
-npm install
-```
-
-### 2. Configure environment variables
-
-Create an `.env` file inside `api/` with these values:
-
+Create `api/.env`:
 ```env
 MONGO=mongodb+srv://<user>:<password>@cluster.mongodb.net/syncdoc
 JWT_SECRET=your_jwt_secret
@@ -114,90 +100,278 @@ GEMINI_API_KEY=your_gemini_api_key
 NODE_ENV=development
 ```
 
-### 3. Run the app
+3. **Setup Frontend**
+```bash
+cd ../client
+npm install
+```
 
-Start the backend from `api/`:
+Create `client/.env`:
+```env
+VITE_API_URL=http://localhost:3000
+```
 
+4. **Run the Application**
+
+Backend (from `api/` directory):
 ```bash
 npm run dev
 ```
 
-Start the frontend from `client/`:
-
+Frontend (from `client/` directory):
 ```bash
 npm run dev
 ```
 
-### 4. Local ports
+5. **Access the application**
+- Frontend: http://localhost:5173
+- API: http://localhost:3000
+- Collaboration Server: ws://localhost:1234
 
-- Frontend: `http://localhost:5173`
-- API server: `http://localhost:3000`
-- Collaboration server: `ws://localhost:1234`
+## 📦 New Dependencies Added
 
-## API Overview
+### Client
+```json
+{
+  "three": "latest version",
+  "@react-three/fiber": "latest version",
+  "@react-three/drei": "latest version"
+}
+```
+
+### API
+```json
+{
+  "@google/genai": "latest version"
+}
+```
+
+## 🎯 3D UI Components
+
+### Hero3D Component Features
+Located in `client/src/components/Hero3D.jsx`
+
+1. **DistortedSphere**: Central animated sphere with distortion effects
+2. **FloatingDocument**: Animated document models floating in 3D space
+3. **GlowingRings**: Orbital rings with emissive materials
+4. **Particles**: Dynamic particle system for ambient effects
+5. **Environment**: HDR environment for realistic reflections
+6. **OrbitControls**: Auto-rotating camera with user interaction
+
+### Customization
+- Adjust colors in material properties
+- Modify animation speeds in `useFrame` hooks
+- Change particle count and distribution
+- Customize document positions and scales
+- Modify camera angles and FOV
+
+## 🤖 AI Integration - Google Gemini SDK
+
+### Migration from Old to New SDK
+
+**Old SDK** (`@google/generative-ai`):
+```javascript
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+const result = await model.generateContentStream(prompt);
+for await (const chunk of result.stream) {
+  const text = chunk.text();
+}
+```
+
+**New SDK** (`@google/genai`):
+```javascript
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
+const result = await genAI.models.generateContentStream({
+  model: 'gemini-2.0-flash-exp',
+  contents: prompt,
+});
+for await (const chunk of result) {
+  const text = chunk.text;
+}
+```
+
+### Benefits of New SDK
+- Improved developer experience
+- Better TypeScript support
+- Simplified API surface
+- Support for latest Gemini 2.0 features
+- Enhanced error handling
+
+## 📚 API Endpoints
 
 ### Authentication
-
-- `POST /api/auth/register` - Create a new user account
-- `POST /api/auth/login` - Log in and receive an auth cookie
-- `POST /api/auth/logout` - Clear the auth cookie
-
-### User
-
-- `GET /api/user/test` - Test route
+- `POST /api/auth/register` - Create new user account
+- `POST /api/auth/login` - Login and receive JWT cookie
+- `POST /api/auth/logout` - Logout and clear cookie
 
 ### Documents
-
-- `POST /api/documents` - Create a new document
-- `GET /api/documents` - List documents owned by or shared with the user
-- `GET /api/documents/:id` - Get a single document with collaborators
-- `PUT /api/documents/:id/title` - Rename a document
+- `POST /api/documents` - Create new document
+- `GET /api/documents` - Get all user documents
+- `GET /api/documents/:id` - Get single document
+- `PUT /api/documents/:id/title` - Update document title
 - `PUT /api/documents/:id/content` - Save document content
-- `DELETE /api/documents/:id` - Delete a document
+- `DELETE /api/documents/:id` - Delete document
 
 ### Collaborators
-
-- `POST /api/documents/:id/collaborators` - Invite a collaborator by email
-- `PUT /api/documents/:id/collaborators/:userId` - Change collaborator role
-- `DELETE /api/documents/:id/collaborators/:userId` - Remove a collaborator or leave a document
+- `POST /api/documents/:id/collaborators` - Add collaborator
+- `PUT /api/documents/:id/collaborators/:userId` - Update role
+- `DELETE /api/documents/:id/collaborators/:userId` - Remove collaborator
 
 ### Messages
+- `GET /api/messages/:documentId` - Get chat messages
+- `POST /api/messages/:documentId` - Send text message
+- `POST /api/messages/:documentId/upload` - Upload file
 
-- `GET /api/messages/:documentId` - Fetch chat history for a document
-- `POST /api/messages/:documentId` - Send a text message
-- `POST /api/messages/:documentId/upload` - Upload a file and send it into chat
+### AI Assistance
+```
+POST /api/ai/:documentId/stream
+```
 
-### AI
+Request body:
+```json
+{
+  "action": "summarize" | "grammar" | "custom",
+  "customPrompt": "Your custom prompt here (required for 'custom' action)"
+}
+```
 
-- `POST /api/ai/:documentId/stream` - Stream AI output for `summarize`, `grammar`, or `custom` actions
+Response: Server-Sent Events (SSE) stream
 
-## Real-Time Services
+## 🎨 UI Highlights
 
-- Socket.IO server runs on `http://localhost:3000`
-- Hocuspocus collaboration server runs on `ws://localhost:1234`
+### Home Page
+- Full-screen 3D hero section with Three.js
+- Glassmorphism card effects
+- Animated gradient backgrounds
+- Smooth scroll indicator
+- Feature cards with hover animations
+- Call-to-action sections
 
-## Access Model
+### Responsive Design
+- Mobile-first approach
+- Touch-friendly 3D controls
+- Adapts to all screen sizes
+- Optimized performance on mobile
 
-- `owner`: Full access, including document deletion and collaborator management
-- `editor`: Can edit document content and rename the document
-- `viewer`: Can access shared documents in read-only mode
+## 🔐 Security Features
 
-## Notes
+- JWT-based authentication with HTTP-only cookies
+- Password hashing with bcryptjs
+- Role-based access control (owner, editor, viewer)
+- Environment variable protection
+- Secure file uploads via Cloudinary
 
-- The repository contains separate `api/` and `client/` apps. There is no root `package.json`.
-- The frontend uses Vite proxying for `/api` requests and collaboration WebSocket traffic during local development.
-- Chat transport uses Socket.IO, while document collaboration uses Yjs through Hocuspocus.
+## 🌟 Performance Optimizations
 
-## Future Improvements
+### Frontend
+- Vite for instant HMR
+- Code splitting and lazy loading
+- Three.js optimizations:
+  - Efficient geometry reuse
+  - Optimized particle systems
+  - Frame rate management
+  - WebGL context handling
 
-- Export documents as PDF, DOCX, or Markdown
-- Add document version history and restore points
-- Organize documents with folders or tags
+### Backend
+- MongoDB indexing
+- Connection pooling
+- Response caching where appropriate
 
-## Contributing
+## 📱 Browser Support
 
-Fork the repository, create a feature branch, and open a pull request. If the change is large, open an issue first to discuss the approach.
+- Chrome 90+ ✅
+- Firefox 88+ ✅
+- Safari 15+ ✅
+- Edge 90+ ✅
 
-## Contact
+**Note**: WebGL 2.0 support required for 3D features
 
-For support or questions, open an issue or contact `ramnath2544@gmail.com`.
+## 🏗️ Project Structure
+
+```
+SyncDoc/
+├── api/
+│   ├── controllers/          # Business logic
+│   │   ├── ai.controller.js      # Gemini AI integration
+│   │   ├── auth.controller.js    # Authentication
+│   │   ├── document.controller.js
+│   │   ├── message.controller.js
+│   │   └── user.controller.js
+│   ├── models/               # Database schemas
+│   │   ├── User.js
+│   │   ├── document.model.js
+│   │   └── message.model.js
+│   ├── routes/               # API routes
+│   ├── utils/                # Utilities
+│   ├── collaboration.js      # Yjs/HocusPocus setup
+│   ├── index.js              # Express server
+│   └── package.json
+│
+├── client/
+│   ├── src/
+│   │   ├── components/       # React components
+│   │   │   ├── Hero3D.jsx        # NEW: 3D hero section
+│   │   │   ├── AiPanel.jsx       # AI assistance UI
+│   │   │   ├── ChatSidebar.jsx
+│   │   │   ├── EditorToolbar.jsx
+│   │   │   ├── ShareModal.jsx
+│   │   │   └── Topbar.jsx
+│   │   ├── pages/            # Route pages
+│   │   │   ├── Home.jsx          # UPDATED: 3D landing page
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   └── EditorPage.jsx
+│   │   ├── redux/            # State management
+│   │   └── utils/            # Helper functions
+│   └── package.json
+│
+└── README.md
+```
+
+## 🎓 Learning Resources
+
+- [Three.js Documentation](https://threejs.org/docs/)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/)
+- [Google Gemini API](https://ai.google.dev/gemini-api/docs)
+- [Yjs Documentation](https://yjs.dev/)
+- [TipTap Editor](https://tiptap.dev/)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🙏 Acknowledgments
+
+- [Three.js](https://threejs.org/) - 3D graphics library
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) - React renderer for Three.js
+- [Google Gemini](https://ai.google.dev/) - AI capabilities
+- [Yjs](https://yjs.dev/) - CRDT framework for collaboration
+- [TipTap](https://tiptap.dev/) - Headless rich text editor
+- [HocusPocus](https://tiptap.dev/hocuspocus) - Collaboration backend
+
+## 📞 Support
+
+For issues and questions:
+- 📧 Email: ramnath2544@gmail.com
+- 🐛 Open an issue on GitHub
+- 📖 Check the [Gemini API docs](https://ai.google.dev/gemini-api/docs)
+
+---
+
+**Built with ❤️ using cutting-edge technologies**
+
+*Powered by Gemini 2.0 • Visualized with Three.js • Synchronized with Yjs*

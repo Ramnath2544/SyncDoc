@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import Document from '../models/document.model.js';
 import { errorHandler } from '../utils/error.js';
 
+// Initialize with the Google Generative AI SDK (stable version)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 function extractText(node) {
@@ -47,6 +48,7 @@ export const streamAI = async (req, res, next) => {
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
 
+    // Using Gemini 2.5 Flash model with stable SDK
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContentStream(prompt);
 

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^3.4.4",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
     "@reduxjs/toolkit": "^2.9.0",
     "@tiptap/extension-character-count": "^2.27.2",
     "@tiptap/extension-collaboration": "^2.27.2",
@@ -32,6 +34,7 @@
     "react-router-dom": "^7.8.2",
     "redux-persist": "^6.0.0",
     "socket.io-client": "^4.8.3",
+    "three": "^0.186.1",
     "yjs": "^13.6.30"
   },
   "devDependencies": {
